@@ -1,4 +1,4 @@
-directions = [
+DIRECTIONS = [
     (0, 1, "горизонтально"),
     (1, 0, "вертикально"),
     (1, 1, "діагональ ↘"),
@@ -13,7 +13,7 @@ def check_winner(board):
 
             color = board[i][j]
 
-            for dx, dy, name in directions:
+            for dx, dy, name in DIRECTIONS:
                 count = 1
                 nx, ny = i + dx, j + dy
 
@@ -68,7 +68,7 @@ def main():
                 player = "білі"
 
             print(f"\nВиграли {player}, зібравши 5 каменів підряд ({direction}).")
-            print(f"Початок послідовності: рядок {x}, колонка {y}.")
+            print(f"Початок послідовності (координати першого каменя з п’ятірки): рядок {x}, колонка {y}.")
 
 if __name__ == "__main__":
     main()
