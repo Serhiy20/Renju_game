@@ -1,3 +1,7 @@
+BOARD_SIZE = 19
+MAX_TESTS = 11
+WIN_LENGTH = 5
+
 DIRECTIONS = [
     (0, 1, "горизонтально"),
     (1, 0, "вертикально"),
@@ -5,9 +9,15 @@ DIRECTIONS = [
     (1, -1, "діагональ ↙")
 ]
 
+def in_bounds(x, y):
+    return 0 <= x < BOARD_SIZE and 0 <= y < BOARD_SIZE
+
+def is_same_color(board, x, y, color):
+    return in_bounds(x, y) and board[x][y] == color
+
 def check_winner(board):
-    for i in range(19):
-        for j in range(19):
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
             if board[i][j] == 0:
                 continue
 
@@ -17,17 +27,18 @@ def check_winner(board):
                 count = 1
                 nx, ny = i + dx, j + dy
 
-                while 0 <= nx < 19 and 0 <= ny < 19 and board[nx][ny] == color:
+                while is_same_color(board, nx, ny, color):
                     count += 1
                     nx += dx
                     ny += dy
 
-                if count == 5:
+                if count == WIN_LENGTH:
                     px, py = i - dx, j - dy
-                    if 0 <= px < 19 and 0 <= py < 19 and board[px][py] == color:
+
+                    if is_same_color(board, px, py, color):
                         continue
 
-                    if 0 <= nx < 19 and 0 <= ny < 19 and board[nx][ny] == color:
+                    if is_same_color(board, nx, ny, color):
                         continue
 
                     return color, i + 1, j + 1, name
@@ -35,18 +46,18 @@ def check_winner(board):
     return 0, None, None, None
 
 def read_board():
-    print("Вставте 19 рядків (по 19 чисел):")
+    print(f"Вставте {BOARD_SIZE} рядків (по {BOARD_SIZE} чисел):")
     board = []
-    while len(board) < 19:
+    while len(board) < BOARD_SIZE:
         row = list(map(int, input().split()))
-        if len(row) != 19:
-            print("Потрібно рівно 19 чисел")
+        if len(row) != BOARD_SIZE:
+            print(f"Потрібно рівно {BOARD_SIZE} чисел")
             continue
         board.append(row)
     return board
 
 def main():
-    t = int(input("Кількість тестів (1-11): "))
+    t = int(input(f"Кількість тестів (1-{MAX_TESTS}): "))
 
     for test in range(1, t + 1):
         print(f"\n=== Тест {test} ===")
@@ -62,12 +73,9 @@ def main():
             print(winner)
             print(f"{x} {y}")
 
-            if winner == 1:
-                player = "чорні"
-            else:
-                player = "білі"
+            player = "чорні" if winner == 1 else "білі"
 
-            print(f"\nВиграли {player}, зібравши 5 каменів підряд ({direction}).")
+            print(f"\nВиграли {player}, зібравши {WIN_LENGTH} каменів підряд ({direction}).")
             print(f"Початок послідовності (координати першого каменя з п’ятірки): рядок {x}, колонка {y}.")
 
 if __name__ == "__main__":
